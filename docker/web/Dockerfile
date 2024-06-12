@@ -18,11 +18,16 @@ RUN set -ex \
 		" \
     && apt-get update \
     && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends $buildDeps tmux postgresql-client \
+    && apt-get install -y --no-install-recommends $buildDeps tmux postgresql-client patch \
     && pip install -U --no-cache-dir wheel setuptools pip \
     && pip install --no-cache-dir -r requirements.txt \
     && apt-get purge -y --auto-remove $buildDeps \
     && rm -rf /var/lib/apt/lists/*
+
+# Patch safe-eth-py with Hemi data now so we don't need to wait for the package
+# to be published.
+COPY patches patches
+RUN patch -d ../usr/local/lib/python3.12/site-packages -p1 -N < patches/safe_eth_py-6.0.0b29.patch 
 
 # /nginx mount point must be created before so it doesn't have root permissions
 # ${APP_HOME} root folder will not be updated by COPY --chown, so permissions need to be adjusted
