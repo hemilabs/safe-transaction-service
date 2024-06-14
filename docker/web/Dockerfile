@@ -27,7 +27,7 @@ RUN set -ex \
 # Patch safe-eth-py with Hemi data now so we don't need to wait for the package
 # to be published.
 COPY patches patches
-RUN patch -d ../usr/local/lib/python3.12/site-packages -p1 -N < patches/safe_eth_py-6.0.0b29.patch 
+RUN patch -d ../usr/local/lib/python3.12/site-packages -p1 -N < patches/safe_eth_py-6.0.0b29.patch
 
 # /nginx mount point must be created before so it doesn't have root permissions
 # ${APP_HOME} root folder will not be updated by COPY --chown, so permissions need to be adjusted
